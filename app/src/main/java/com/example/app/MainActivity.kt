@@ -2,7 +2,7 @@ package com.example.app
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -12,6 +12,7 @@ import com.example.app.widget.CodeView
 import com.example.core.utils.CacheUtils
 import com.example.core.utils.Utils
 import com.example.lesson.LessonActivity
+import kotlin.reflect.KProperty
 
 /**
  * @author qhc
@@ -22,26 +23,42 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private val usernameKey = "username"
     private val passwordKey = "password"
 
-    private lateinit var et_username: EditText
-    private lateinit var et_password: EditText
-    private lateinit var et_code: EditText
+    private lateinit var etUsername: EditText
+    private lateinit var etPassword: EditText
+    private lateinit var etCode: EditText
+
+    private var usernameSp: String by Saver(usernameKey)
+    private var passwordSp: String by Saver(passwordKey)
+
+    class Saver(private var key: String) {
+        operator fun getValue(mainActivity: MainActivity, property: KProperty<*>): String {
+            return CacheUtils.get(key) ?: ""
+        }
+
+        operator fun setValue(mainActivity: MainActivity, property: KProperty<*>, value: String) {
+            CacheUtils.save(key, value)
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        et_username = findViewById(R.id.et_username)
-        et_password = findViewById(R.id.et_password)
-        et_code = findViewById(R.id.et_code)
+        etUsername = findViewById(R.id.et_username)
+        etPassword = findViewById(R.id.et_password)
+        etCode = findViewById(R.id.et_code)
 
-        et_username.setText(CacheUtils.get(usernameKey))
-        et_password.setText(CacheUtils.get(passwordKey))
+        etUsername.setText(usernameSp)
+        etPassword.setText(passwordSp)
 
-        val btn_login: Button = findViewById(R.id.btn_login)
-        val img_code: CodeView = findViewById(R.id.code_view)
+        findViewById<Button>(R.id.btn_login).apply {
+            setOnClickListener(this@MainActivity)
+        }
+        findViewById<CodeView>(R.id.code_view).apply {
+            setOnClickListener(this@MainActivity)
+        }
 
-        btn_login.setOnClickListener(this)
-        img_code.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -53,17 +70,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun login() {
-        val username = et_username.text.toString().trim()
-        val password = et_password.text.toString().trim()
-        val code = et_code.text.toString()
+        val username = etUsername.text.toString().trim()
+        val password = etPassword.text.toString().trim()
+        val code = etCode.text.toString()
 
         val user = User(username, password, code)
+
+        Log.e("QHC", (user.copy() + user).toString())  //测试操作符重载
 
         //  var (username1, password1, code1) = user //解构
 
         if (verify(user)) {
-            CacheUtils.save(usernameKey, username)
-            CacheUtils.save(passwordKey, password)
+            usernameSp = username
+            passwordSp = password
 
             startActivity(Intent(this, LessonActivity::class.java))
         }

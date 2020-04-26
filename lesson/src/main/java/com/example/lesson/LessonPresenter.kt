@@ -40,13 +40,5 @@ class LessonPresenter constructor(val activity: LessonActivity) {
         activity.showResult(lessons.filter {
             it.state == Lesson.State.PLAYBACK
         })
-
-      /*  val playbackLessons = ArrayList<Lesson>()
-        lessons.forEach {
-            if (it.state == Lesson.State.PLAYBACK){
-                playbackLessons.add(it)
-            }
-        }
-        activity.showResult(playbackLessons)*/
     }
 }
