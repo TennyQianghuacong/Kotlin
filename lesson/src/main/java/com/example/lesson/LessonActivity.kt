@@ -18,6 +18,9 @@ import com.example.lesson.entity.Lesson
  */
 class LessonActivity :AppCompatActivity(), BaseView<LessonPresenter>, Toolbar.OnMenuItemClickListener{
 
+    override val presenter: LessonPresenter by lazy {
+        LessonPresenter(this)
+    }
 
     private val lessonAdapter = LessonAdapter()
     private lateinit var refreshLayout : SwipeRefreshLayout
@@ -39,11 +42,11 @@ class LessonActivity :AppCompatActivity(), BaseView<LessonPresenter>, Toolbar.On
 
         refreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
                 .apply {
-                    setOnRefreshListener { getPresenter().fetchData() }
+                    setOnRefreshListener { presenter.fetchData() }
                     isRefreshing = true
                 }
 
-        getPresenter().fetchData()
+        presenter.fetchData()
     }
 
     fun showResult(lessons: List<Lesson>) {
@@ -52,11 +55,8 @@ class LessonActivity :AppCompatActivity(), BaseView<LessonPresenter>, Toolbar.On
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
-        getPresenter().showPlayback()
+        presenter.showPlayback()
         return false
     }
-
-    override val presenter: LessonPresenter
-        get() =  LessonPresenter(this)
 
 }

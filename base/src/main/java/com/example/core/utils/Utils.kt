@@ -11,18 +11,14 @@ import com.example.core.BaseApplication
  */
 object Utils {
 
-    val displayMetrics = Resources.getSystem().displayMetrics
+    private val displayMetrics = Resources.getSystem().displayMetrics
 
     fun dp2px(dp: Float): Float {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, displayMetrics)
     }
 
-    fun toast(string: String){
-        toast(string, Toast.LENGTH_SHORT)
-    }
-
-    fun toast(string: String, duration: Int) {
-        Toast.makeText(BaseApplication.currentApplication(), string, duration).show()
+    fun toast(string: String, duration: Int = Toast.LENGTH_SHORT) {//参数默认值，替换Java重构
+        Toast.makeText(BaseApplication.currentApplication, string, duration).show()
     }
 
 }

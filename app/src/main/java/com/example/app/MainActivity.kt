@@ -34,11 +34,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         et_password = findViewById(R.id.et_password)
         et_code = findViewById(R.id.et_code)
 
-        et_username.text = Editable.Factory.getInstance().newEditable(CacheUtils.get(usernameKey))
-        et_password.text = Editable.Factory.getInstance().newEditable(CacheUtils.get(passwordKey))
+        et_username.setText(CacheUtils.get(usernameKey))
+        et_password.setText(CacheUtils.get(passwordKey))
 
         val btn_login: Button = findViewById(R.id.btn_login)
-        val img_code: Button = findViewById(R.id.code_view)
+        val img_code: CodeView = findViewById(R.id.code_view)
 
         btn_login.setOnClickListener(this)
         img_code.setOnClickListener(this)
@@ -59,6 +59,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         val user = User(username, password, code)
 
+        //  var (username1, password1, code1) = user //解构
+
         if (verify(user)) {
             CacheUtils.save(usernameKey, username)
             CacheUtils.save(passwordKey, password)
@@ -67,12 +69,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun verify(user: User): Boolean{
-        if (user.username != null && user.username!!.length < 4) {
+    private fun verify(user: User): Boolean {
+        if (user.username?.length ?: 0 < 4) { //Elvis表达式
             Utils.toast("用户名不合法")
             return false
         }
-        if (user.password != null && user.password!!.length < 4) {
+        if (user.password?.length ?: 0 < 4) {
             Utils.toast("密码不合法")
             return false
         }

@@ -16,10 +16,10 @@ import java.util.*
  * @author qhc
  * @time 2020/4/24
  */
-class CodeView : AppCompatTextView {
+class CodeView constructor(context: Context, attrs: AttributeSet?) : AppCompatTextView(context, attrs) {
 
-    val paint = Paint()
-    val codeList = arrayOf(
+    private val paint = Paint()
+    private val codeList = arrayOf(
             "kotlin",
             "android",
             "java",
@@ -30,18 +30,20 @@ class CodeView : AppCompatTextView {
             "tcp/ip"
     )
 
-    constructor(context: Context):this(context, null)
+    constructor(context: Context) : this(context, null)
 
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
+    init {
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
         gravity = Gravity.CENTER
         setBackgroundColor(getContext().getColor(R.color.colorPrimary))
         setTextColor(Color.WHITE)
 
-        paint.isAntiAlias = true
-        paint.style = Paint.Style.STROKE
-        paint.color = getContext().getColor(R.color.colorAccent)
-        paint.strokeWidth = Utils.dp2px(6f)
+        paint.run {
+            isAntiAlias = true
+            style = Paint.Style.STROKE
+            color = getContext().getColor(R.color.colorAccent)
+            strokeWidth = Utils.dp2px(6f)
+        }
 
         updateCode()
     }

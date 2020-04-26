@@ -4,8 +4,8 @@ package com.example.app.entity
  * @author qhc
  * @time 2020/4/24
  */
-class User constructor (var username: String ?, var password: String?, var code: String?){
+data class User constructor(var username: String?, var password: String?, var code: String?) {
 
-    constructor():this(null, null, null)
+    constructor() : this(null, null, null)
 
 }
