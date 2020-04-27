@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         val user = User(username, password, code)
 
-        Log.e("QHC", (user.copy() + user).toString())  //测试操作符重载
+        log((user.copy() + user))  //测试操作符重载
 
         //  var (username1, password1, code1) = user //解构
 
@@ -100,4 +100,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         return true
     }
 
+}
+
+inline fun log(user: User) {//inline内联函数  (但是这种类型的内联函数对提升性能没有帮助)
+    Log.e(MainActivity::class.simpleName, user.toString())
 }
